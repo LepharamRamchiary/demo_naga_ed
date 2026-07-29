@@ -1,0 +1,21 @@
+.env
+.vscode
+
+
+# server
+server/node_modules
+server/.env
+
+
+
+# client
+client/node_modules
+client/.env
+
+
+
+# Fast API
+fast_api/vene
+fast_api/.env
+fast_api/__pycache__
+

@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #16241b;
+  --color-paper: #f6efdd;
+  --color-turmeric: #e3a635;
+  --color-chili: #8c2f26;
+  --color-leaf: #4f7a5b;
+  --color-smoke: #6b6459;
+
+  --font-display: "Baloo 2", cursive;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-paper text-ink font-body antialiased;
+}
+
+.scallop-bottom {
+  position: relative;
+}
+.scallop-bottom::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 22px;
+  background-image: radial-gradient(
+    circle at 12px 0,
+    transparent 12px,
+    var(--scallop-color, #f6efdd) 13px
+  );
+  background-size: 24px 24px;
+  background-repeat: repeat-x;
+}
+
+/* Keyboard focus visibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #e3a635;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
