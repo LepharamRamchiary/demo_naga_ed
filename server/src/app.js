@@ -70,7 +70,7 @@ app.use("/api/v1", authRoutes);
 app.use("/api/v1/users", userRoutes);
 
 // health check
-app.get("/", (_req, res) => {
+app.get("/api/v1/health", (_req, res) => {
   res.status(200).json({ success: true, message: "API is running" });
 });
 
