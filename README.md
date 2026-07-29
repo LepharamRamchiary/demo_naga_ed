@@ -96,9 +96,42 @@ git@github.com:LepharamRamchiary/demo_naga_ed.git
 
 
 ## Fast API(AI Agent)
-- Step 1 - Verify that Python 3.14 is installed on your system.
-- Step 2: Activate the Virtual Environment
-  - 
-  
+- Step 1 - Verify that Python 3.14 is installed on your system. & Open the **Docker Desktop** application and make sure the Docker Engine is running before executing any Docker commands.
+- Step 2 Activate the Virtual Environment
+  ```
+  # For Command Prompt
+  venv\Scripts\activate.bat
+
+  # For PowerShell
+  venv\Scripts\Activate.ps1
+  ```
+- Step 3 Install Dependencies
+  - `pip install -r requirements.txt`
+- Step 4 Start the FastAPI Server
+  - `uvicorn main:app --reload --port 8000`
+##### After starting the server, you can access the Swagger UI at: `http://127.0.0.1:8000/docs`
+
+
+## Docker
+- Step 1: Build and Start the Containers
+  ```
+  docker compose up --build
+  ```
+- Step 2: Verify the Containers
+  ```
+  docker compose ps
+  ```
+- Step 3: Optional
+  - Stop all running Docker containers: `docker compose down`
+  - Start the existing Docker containers: `docker compose up`
+
+- Step4: Once the containers are running, you can access:
+  ```
+  React (Client): http://localhost:5173
+  Express API: http://localhost:5000
+  FastAPI Service: http://localhost:8000
+  FastAPI Swagger UI: http://localhost:8000/docs
+  ```
+
 
   
