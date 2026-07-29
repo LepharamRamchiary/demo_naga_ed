@@ -23,9 +23,11 @@
 
 # Clone Repository
 ```
-https://github.com/LepharamRamchiary/demo_naga_ed.git
+git clone https://github.com/LepharamRamchiary/demo_naga_ed.git
+```
 or
-git@github.com:LepharamRamchiary/demo_naga_ed.git
+```
+git clone git@github.com:LepharamRamchiary/demo_naga_ed.git
 ```
 
 ## Client
@@ -107,7 +109,11 @@ git@github.com:LepharamRamchiary/demo_naga_ed.git
   ```
 - Step 3 Install Dependencies
   - `pip install -r requirements.txt`
-- Step 4 Start the FastAPI Server
+- Step 4 Setup Environment Variable
+  ```
+  GROQ_API_KEY=your api key
+  ```
+- Step 5 Start the FastAPI Server
   - `uvicorn main:app --reload --port 8000`
 ##### After starting the server, you can access the Swagger UI at: `http://127.0.0.1:8000/docs`
 
