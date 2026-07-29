@@ -84,7 +84,7 @@ git@github.com:LepharamRamchiary/demo_naga_ed.git
   - After executing the command, the server will be available at `http://localhost:5000`
   - After starting the server, you can verify that the API is running by opening the following endpoint in your browser or testing it with Postman:
     ```
-    http://localhost:5000/health
+    http://localhost:5000/api/v1/health
     ```
   - If the API is running successfully, you should receive the following response:
     ```
@@ -128,7 +128,8 @@ git@github.com:LepharamRamchiary/demo_naga_ed.git
 - Step4: Once the containers are running, you can access:
   ```
   React (Client): http://localhost:8080
-  FastAPI Swagger UI: http://localhost:8080/docs
+  Server (Backend): http://localhost:8080/api/v1/health
+  FastAPI Swagger UI: http://localhost:8080/ai/docs
   ```
 
 
