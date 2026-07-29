@@ -127,10 +127,8 @@ git@github.com:LepharamRamchiary/demo_naga_ed.git
 
 - Step4: Once the containers are running, you can access:
   ```
-  React (Client): http://localhost:5173
-  Express API: http://localhost:5000
-  FastAPI Service: http://localhost:8000
-  FastAPI Swagger UI: http://localhost:8000/docs
+  React (Client): http://localhost:8080
+  FastAPI Swagger UI: http://localhost:8080/docs
   ```
 
 
