@@ -82,7 +82,7 @@ git clone git@github.com:LepharamRamchiary/demo_naga_ed.git
   JWT_EXPIRES_IN=1d
   ```
 - Step 3 Start the Application
-  - If nodemon is installed, `run npm run dev`. Otherwise, run `npm start`.
+  - If nodemon is installed, `npm run dev`. Otherwise, run `npm start`.
   - After executing the command, the server will be available at `http://localhost:5000`
   - After starting the server, you can verify that the API is running by opening the following endpoint in your browser or testing it with Postman:
     ```
