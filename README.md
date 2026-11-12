@@ -139,11 +139,65 @@ The frontend is served through Nginx, which proxies `/api/` to Express and
    It also passes only the required settings to each service and waits for
    service health checks before starting dependents.
 
-3. Build and start the services:
+3. Docker Commands
 
-   ```powershell
-   docker compose up --build
-   ```
+Run the following commands from the directory containing your `docker-compose.yml` or `compose.yaml` file.
+
+#### a. Build Images
+
+Build Docker images without starting containers.
+
+```powershell
+docker compose build
+```
+
+#### b. Rebuild Images
+
+Rebuild Docker images without using the build cache.
+
+```powershell
+docker compose build --no-cache
+```
+
+#### c. Build and Start Services
+
+Build images (if needed) and start all services in the foreground.
+
+```powershell
+docker compose up --build
+```
+
+#### d. Start Services in Background
+
+Build images (if needed) and run all services in detached mode.
+
+```powershell
+docker compose up -d --build
+```
+
+#### e. Start Existing Containers
+
+Start previously created, stopped containers.
+
+```powershell
+docker compose start
+```
+
+#### f. Stop Running Services
+
+Stop running containers without removing them.
+
+```powershell
+docker compose stop
+```
+
+#### h. Stop and Remove Containers
+
+Stop and remove containers and the default Compose network. Images and named volumes are preserved.
+
+```powershell
+docker compose down
+```
 
 4. Open <http://localhost:8080>. The health checks are available at
    <http://localhost:8080/api/v1/health> and <http://localhost:8080/ai/>.
