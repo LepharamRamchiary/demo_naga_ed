@@ -102,14 +102,15 @@ git clone git@github.com:LepharamRamchiary/demo_naga_ed.git
 - Step 1 - Verify that Python 3.14 is installed on your system. 
 - Step 2 - Create Virtual Environment
   ```
+  # command
   python -m venv venv
   ```
 - Step 3 Activate the Virtual Environment
   ```
-  # For Command Prompt
+  # command
   venv\Scripts\activate.bat
 
-  # For PowerShell
+  # command
   venv\Scripts\Activate.ps1
   ```
 - Step 4 Install Dependencies
