@@ -1,8 +1,9 @@
 import logging
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Request, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import ValidationError
+from fastapi.responses import JSONResponse
 
 from config import ALLOWED_ORIGINS
 from groq_client import GroqAPIError, generate_username_suggestions
@@ -39,7 +40,7 @@ def health_check():
     "/api/suggest-username",
     response_model=UsernameSuggestionResponse,
     responses={
-        400: {"model": ErrorResponse, "description": "Malformed input"},
+        422: {"model": ErrorResponse, "description": "Malformed input"},
         502: {"model": ErrorResponse, "description": "Groq API call failed"},
     },
     tags=["Username Suggestions"],
@@ -68,6 +69,21 @@ async def suggest_username(payload: UsernameSuggestionRequest):
     return UsernameSuggestionResponse(suggestions=suggestions)
 
 
-@app.exception_handler(ValidationError)
-async def validation_exception_handler(_request, exc: ValidationError):
-    raise HTTPException(status_code=400, detail=str(exc))
+@app.exception_handler(HTTPException)
+async def http_exception_handler(_request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=ErrorResponse(message=str(exc.detail)).model_dump(),
+        headers=exc.headers,
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def request_validation_exception_handler(
+    _request: Request, exc: RequestValidationError
+):
+    messages = "; ".join(error["msg"] for error in exc.errors())
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content=ErrorResponse(message=messages).model_dump(),
+    )

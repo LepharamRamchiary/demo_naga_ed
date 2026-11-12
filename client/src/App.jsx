@@ -12,6 +12,7 @@ import Overview from "./pages/dashboard/Overview";
 import Profile from "./pages/dashboard/Profile";
 import Settings from "./pages/dashboard/Settings";
 import Users from "./pages/dashboard/Users";
+import AiUsername from "./pages/dashboard/AiUsername";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="users" element={<Users />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="ai" element={<AiUsername />} />
         </Route>
       </Route>
 

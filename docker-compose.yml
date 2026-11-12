@@ -76,6 +76,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_URL: /api/v1
+        VITE_AI_API_URL: /ai
     container_name: nagaed_client
     restart: unless-stopped
     depends_on:

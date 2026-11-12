@@ -69,6 +69,8 @@ async def generate_username_suggestions(interests: list[str]) -> list[str]:
         "Content-Type": "application/json",
     }
 
+    headers["Authorization"] = f"Bearer {GROQ_API_KEY}"
+
     try:
         async with httpx.AsyncClient(timeout=15.0) as client:
             response = await client.post(GROQ_API_URL, json=payload, headers=headers)

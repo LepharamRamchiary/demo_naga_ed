@@ -24,6 +24,8 @@ class UsernameSuggestionRequest(BaseModel):
 class UsernameSuggestionResponse(BaseModel):
     """Response body for POST /api/suggest-username"""
 
+    success: bool = True
+    message: str = "Username suggestions generated successfully."
     suggestions: list[str] = Field(
         ...,
         description="Three unique, creative username suggestions.",

@@ -6,6 +6,8 @@ WORKDIR /app
 # start — so this has to come in as a build arg, not a runtime env var.
 ARG VITE_API_URL=/api/v1
 ENV VITE_API_URL=$VITE_API_URL
+ARG VITE_AI_API_URL=/ai
+ENV VITE_AI_API_URL=$VITE_AI_API_URL
 
 COPY package*.json ./
 RUN npm ci

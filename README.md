@@ -44,6 +44,7 @@ git clone git@github.com:LepharamRamchiary/demo_naga_ed.git
   ```
   # .env
   VITE_API_URL=your backend URL
+  VITE_AI_API_URL=http://localhost:8000
   ```
 - Step 3 Start the Application
     - `npm run dev`
@@ -113,6 +114,10 @@ git clone git@github.com:LepharamRamchiary/demo_naga_ed.git
   ```
   GROQ_API_KEY=your api key
   ```
+- The dashboard's **AI Username** page sends interests to the FastAPI
+  service and displays its three suggestions and response message. For local
+  development, set `VITE_AI_API_URL=http://localhost:8000` in `client/.env`.
+  The Docker build uses the existing `/ai` reverse proxy automatically.
 - Step 5 Start the FastAPI Server
   - `uvicorn main:app --reload --port 8000`
 ##### After starting the server, you can access the Swagger UI at: `http://127.0.0.1:8000/docs`

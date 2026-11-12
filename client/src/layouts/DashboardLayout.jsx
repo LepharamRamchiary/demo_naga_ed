@@ -11,6 +11,7 @@ import {
   Bell,
   Search,
   Users,
+  Sparkles,
 } from "lucide-react";
 
 export default function DashboardLayout() {
@@ -23,6 +24,7 @@ export default function DashboardLayout() {
     { name: "Overview", path: "/dashboard", icon: LayoutDashboard },
     { name: "Profile", path: "/dashboard/profile", icon: User },
     { name: "Users", path: "/dashboard/users", icon: Users },
+    { name: "AI Username", path: "/dashboard/ai", icon: Sparkles },
     { name: "Settings", path: "/dashboard/settings", icon: Settings },
   ];
 
