@@ -1,4 +1,5 @@
 import { Camera, Send, Globe, GraduationCap } from "lucide-react";
+import { Link } from "react-router";
 
 const columns = [
   {
@@ -32,13 +33,13 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-5">
         <div className="grid gap-10 border-b border-paper/10 pb-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <a href="#top" className="flex items-center gap-2 text-paper">
+            <Link to="/" className="flex items-center gap-2 text-paper">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-turmeric text-ink">
                 <GraduationCap size={18} strokeWidth={2.5} />
               </span>
 
               <span className="font-display text-2xl font-700">DemoEdu</span>
-            </a>
+            </Link>
 
             <p className="mt-4 max-w-xs font-body text-sm leading-relaxed text-paper/60">
               Empowering learners with quality education, practical skills, and
@@ -47,14 +48,14 @@ export default function Footer() {
 
             <div className="mt-5 flex items-center gap-3">
               {socials.map(({ icon: Icon, label }) => (
-                <a
+                <Link
                   key={label}
-                  href="#top"
+                  to="/"
                   aria-label={label}
                   className="flex h-9 w-9 items-center justify-center rounded-full border border-paper/15 text-paper/70 transition hover:border-turmeric hover:text-turmeric"
                 >
                   <Icon size={16} />
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -68,12 +69,12 @@ export default function Footer() {
               <ul className="mt-4 space-y-3">
                 {col.links.map((link) => (
                   <li key={link}>
-                    <a
-                      href="#top"
+                    <Link
+                      to="/"
                       className="font-body text-sm text-paper/65 transition hover:text-paper"
                     >
                       {link}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

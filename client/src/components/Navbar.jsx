@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Menu, X, UtensilsCrossed, GraduationCap } from "lucide-react";
+import { Link } from "react-router";
+import { Menu, X, GraduationCap } from "lucide-react";
 
 const links = [
-  { label: "Courses", href: "#menu" },
-  { label: "Why DemoEdu", href: "#why" },
-  { label: "How it works", href: "#how" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", to: "/" },
+  { label: "Courses", to: "/#menu" },
+  { label: "Why DemoEdu", to: "/#why" },
+  { label: "How it works", to: "/#how" },
+  { label: "Contact", to: "/#contact" },
 ];
 
 export default function Navbar() {
@@ -17,35 +19,35 @@ export default function Navbar() {
         className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4"
         aria-label="Primary"
       >
-        <a href="#top" className="flex items-center gap-2 text-paper">
+        <Link to="/" className="flex items-center gap-2 text-paper">
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-turmeric text-ink">
             <GraduationCap size={18} strokeWidth={2.5} />
           </span>
           <span className="font-display text-2xl font-700 tracking-wide">
             DemoEdu
           </span>
-        </a>
+        </Link>
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-8 md:flex">
           {links.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
+            <li key={link.to}>
+              <Link
+                to={link.to}
                 className="font-body text-sm font-medium text-paper/80 transition hover:text-turmeric"
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
 
-        <a
-          href="/login"
+        <Link
+          to="/login"
           className="hidden rounded-full bg-turmeric px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:bg-paper md:inline-block"
         >
           Sign in
-        </a>
+        </Link>
 
         {/* Mobile toggle */}
         <button
@@ -65,24 +67,24 @@ export default function Navbar() {
         <div id="mobile-menu" className="border-t border-paper/10 md:hidden">
           <ul className="flex flex-col gap-1 px-5 py-4">
             {links.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
+              <li key={link.to}>
+                <Link
+                  to={link.to}
                   onClick={() => setOpen(false)}
                   className="block rounded-lg px-2 py-3 font-body text-base text-paper/85 transition hover:bg-paper/5 hover:text-turmeric"
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
             <li className="pt-2">
-              <a
-                href="#order"
+              <Link
+                to="/login"
                 onClick={() => setOpen(false)}
                 className="block rounded-full bg-turmeric px-5 py-3 text-center font-body text-sm font-semibold text-ink"
               >
                 Sign in
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
