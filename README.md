@@ -99,8 +99,12 @@ git clone git@github.com:LepharamRamchiary/demo_naga_ed.git
 
 
 ## Fast API(AI Agent)
-- Step 1 - Verify that Python 3.14 is installed on your system. & Open the **Docker Desktop** application and make sure the Docker Engine is running before executing any Docker commands.
-- Step 2 Activate the Virtual Environment
+- Step 1 - Verify that Python 3.14 is installed on your system. 
+- Step 2 - Create Virtual Environment
+  ```
+  python -m venv venv
+  ```
+- Step 3 Activate the Virtual Environment
   ```
   # For Command Prompt
   venv\Scripts\activate.bat
@@ -108,9 +112,9 @@ git clone git@github.com:LepharamRamchiary/demo_naga_ed.git
   # For PowerShell
   venv\Scripts\Activate.ps1
   ```
-- Step 3 Install Dependencies
+- Step 4 Install Dependencies
   - `pip install -r requirements.txt`
-- Step 4 Setup Environment Variable
+- Step 5 Setup Environment Variable
   ```
   GROQ_API_KEY=your api key
   ```
@@ -118,7 +122,7 @@ git clone git@github.com:LepharamRamchiary/demo_naga_ed.git
   service and displays its three suggestions and response message. For local
   development, set `VITE_AI_API_URL=http://localhost:8000` in `client/.env`.
   The Docker build uses the existing `/ai` reverse proxy automatically.
-- Step 5 Start the FastAPI Server
+- Step 6 Start the FastAPI Server
   - `uvicorn main:app --reload --port 8000`
 ##### After starting the server, you can access the Swagger UI at: `http://127.0.0.1:8000/docs`
 
