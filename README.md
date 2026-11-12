@@ -1,152 +1,185 @@
-## Tech Stack
+# Demo Naga Ed
 
-### Frontend
-- React.js
-- Vite
-- Tailwind CSS
-- Axios
+Demo Naga Ed is a learning dashboard with account registration and login, a
+Node.js/Express API, and an AI username generator. The AI service uses FastAPI
+and Groq to suggest three usernames based on a user's interests.
 
-### Backend
-- Node.js
-- npm
-- Express.js
-- MySQL
+## Technology
 
-### AI Service
-- Python
-- FastAPI
-- Groq API
+- **Frontend:** React, Vite, Tailwind CSS
+- **Backend:** Node.js, Express, Sequelize, MySQL
+- **AI service:** Python, FastAPI, Groq API
+- **Deployment:** Docker Compose and Nginx
 
-### Others
-- Docker
-- Docker Compose
+## Requirements
 
-# Clone Repository
+For local development:
+
+- Node.js and npm
+- Python 3.12 or later
+- MySQL 8.x
+- A Groq API key (needed for AI username generation)
+
+Alternatively, install Docker Desktop and use the Docker Compose instructions
+below.
+
+## Run locally
+
+Run each service in its own terminal. Create the environment files described
+below before starting the services.
+
+### 1. Configure MySQL and the backend
+
+Create a MySQL database, then create `server/.env` with your local database
+credentials:
+
+```env
+PORT=5000
+NODE_ENV=development
+ALLOWED_ORIGINS=http://localhost:5173
+
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_mysql_password
+DB_NAME=demo_naga_ed
+
+JWT_SECRET=replace_with_a_long_random_secret
+JWT_EXPIRES_IN=1d
 ```
-git clone https://github.com/LepharamRamchiary/demo_naga_ed.git
+
+In a terminal:
+
+```powershell
+cd server
+npm install
+npm run dev
 ```
-or
+
+The backend connects to MySQL and syncs its Sequelize models when it starts.
+Check that it is running at <http://localhost:5000/api/v1/health>.
+
+### 2. Configure and run the AI service
+
+Create `fast_api/.env`:
+
+```env
+GROQ_API_KEY=your_groq_api_key
+ALLOWED_ORIGINS=http://localhost:5173
 ```
-git clone git@github.com:LepharamRamchiary/demo_naga_ed.git
+
+Keep the API key private. Do not put it in a `VITE_` variable or commit it to
+Git.
+
+In a second terminal:
+
+```powershell
+cd fast_api
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
 ```
 
-## Client
-- Step 1 Installation
-  - `cd client` 
-  - `npm install`
-- Step 2 Environment Variables
-  - Copy the `.env.example` file to `.env` and fill in the required environment variables.
-    
-  ```
-  cp .env.example .env
-  ```
+The service health check is at <http://localhost:8000/> and its interactive API
+documentation is at <http://localhost:8000/docs>.
 
-  ```
-  # .env
-  VITE_API_URL=your backend URL
-  VITE_AI_API_URL=http://localhost:8000
-  ```
-- Step 3 Start the Application
-    - `npm run dev`
-    - After starting the application, open the following URL in your browser:
-      `http://localhost:5173/`
+### 3. Configure and run the frontend
 
+Create `client/.env`:
 
+```env
+VITE_API_URL=http://localhost:5000/api/v1
+VITE_AI_API_URL=http://localhost:8000
+```
 
-## Server
-- Step 1 Installation
-  - `cd server`
-  - `npm install`
-  - `npm install -D nodemon`
-- Step 2 Environment Variables
-  - Copy the `.env.example` file to `.env` and fill in the required environment variables.
-    
-  ```
-  cp .env.example .env
-  ```
+In a third terminal:
 
-  ```
-  # .env
-  PORT=your port
-  NODE_ENV=development
-  ALLOWED_ORIGINS=your frontend URL
+```powershell
+cd client
+npm install
+npm run dev
+```
 
-  # Db
-  DB_HOST=localhost
-  DB_PORT=3306
-  DB_USER=root
-  DB_PASSWORD=your password
-  DB_NAME=your db name
+Open <http://localhost:5173>, register or log in, then open **AI Username** in
+the dashboard to generate suggestions. Vite reads its environment variables
+when it starts, so restart the frontend after changing `client/.env`.
 
-  # JWT
-  JWT_SECRET=your secret
-  JWT_EXPIRES_IN=1d
-  ```
-- Step 3 Start the Application
-  - If nodemon is installed, `npm run dev`. Otherwise, run `npm start`.
-  - After executing the command, the server will be available at `http://localhost:5000`
-  - After starting the server, you can verify that the API is running by opening the following endpoint in your browser or testing it with Postman:
-    ```
-    http://localhost:5000/api/v1/health
-    ```
-  - If the API is running successfully, you should receive the following response:
-    ```
-    {
-      "success": true,
-      "message": "API is running"
-    }
-    ```
+## Run with Docker Compose
 
+Docker Compose starts MySQL, the backend, the AI service, and the frontend.
+The frontend is served through Nginx, which proxies `/api/` to Express and
+`/ai/` to FastAPI.
 
-## Fast API(AI Agent)
-- Step 1 - Verify that Python 3.14 is installed on your system. 
-- Step 2 - Create Virtual Environment
-  ```
-  # command
-  python -m venv venv
-  ```
-- Step 3 Activate the Virtual Environment
-  ```
-  # command
-  venv\Scripts\activate.bat
+1. Copy the root environment template:
 
-  # command
-  venv\Scripts\Activate.ps1
-  ```
-- Step 4 Install Dependencies
-  - `pip install -r requirements.txt`
-- Step 5 Setup Environment Variable
-  ```
-  GROQ_API_KEY=your api key
-  ```
-- The dashboard's **AI Username** page sends interests to the FastAPI
-  service and displays its three suggestions and response message. For local
-  development, set `VITE_AI_API_URL=http://localhost:8000` in `client/.env`.
-  The Docker build uses the existing `/ai` reverse proxy automatically.
-- Step 6 Start the FastAPI Server
-  - `uvicorn main:app --reload --port 8000`
-##### After starting the server, you can access the Swagger UI at: `http://127.0.0.1:8000/docs`
+   ```powershell
+   Copy-Item .env.example .env
+   ```
 
+2. Edit the root `.env` and set real values for the database password, database
+   name, JWT secret, and Groq key. For example:
 
-## Docker
-- Step 1: Build and Start the Containers
-  ```
-  docker compose up --build
-  ```
-- Step 2: Verify the Containers
-  ```
-  docker compose ps
-  ```
-- Step 3: Optional
-  - Stop all running Docker containers: `docker compose down`
-  - Start the existing Docker containers: `docker compose up`
+   ```env
+   GROQ_API_KEY=your_groq_api_key
+   PORT=5000
+   NODE_ENV=development
+   ALLOWED_ORIGINS=http://localhost:8080
 
-- Step4: Once the containers are running, you can access:
-  ```
-  React (Client): http://localhost:8080
-  Server (Backend): http://localhost:8080/api/v1/health
-  FastAPI Swagger UI: http://localhost:8080/ai/docs
-  ```
+   DB_HOST=db
+   DB_PORT=3306
+   DB_USER=root
+   DB_PASSWORD=your_mysql_password
+   DB_NAME=demo_naga_ed
 
+   JWT_SECRET=replace_with_a_long_random_secret
+   JWT_EXPIRES_IN=1d
+   ```
 
-  
+   `DB_HOST=db` is required for Compose because the backend connects to the
+   MySQL service by its Compose service name. The Compose file also sets this
+   value for the backend container.
+
+3. Build and start the services:
+
+   ```powershell
+   docker compose up --build
+   ```
+
+4. Open <http://localhost:8080>. The health checks are available at
+   <http://localhost:8080/api/v1/health> and <http://localhost:8080/ai/>.
+   FastAPI documentation is available at <http://localhost:8080/ai/docs>.
+
+Stop the services with `docker compose down`. To also delete the persisted
+database volume, use `docker compose down --volumes`; this permanently deletes
+the database data.
+
+## Environment files
+
+- `server/.env` and `fast_api/.env` are used when running those services
+  locally.
+- `client/.env` configures the local Vite development server.
+- The root `.env` is used by Docker Compose for the backend and AI service.
+  Compose sets the frontend's API URLs to `/api/v1` and `/ai` at build time.
+- Never commit real environment files, passwords, JWT secrets, or API keys.
+
+## Useful commands
+
+Run frontend checks from `client`:
+
+```powershell
+npm run lint
+npm run build
+```
+
+## API endpoints
+
+- `GET /api/v1/health` — Express API health check
+- `GET /` — FastAPI health check
+- `POST /api/suggest-username` — generate three suggestions; request body:
+
+  ```json
+  {
+    "interests": ["gaming", "anime", "cooking"]
+  }
+  ```
