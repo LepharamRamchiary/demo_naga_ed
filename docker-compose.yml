@@ -1,74 +1,83 @@
 services:
   db:
     image: mysql:8.4
-    container_name: nagaed_db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in the root .env file}
+      MYSQL_DATABASE: ${DB_NAME:?Set DB_NAME in the root .env file}
     volumes:
       - db_data:/var/lib/mysql
-    networks:
-      - app-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_PASSWORD}"]
+      test:
+        [
+          "CMD-SHELL",
+          'mysqladmin ping --host=127.0.0.1 --user=root --password="$${MYSQL_ROOT_PASSWORD}" --silent',
+        ]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 20s
-    # No "ports:" here on purpose — MySQL is only reachable by other
-    # containers on app-network, never exposed to the host/public internet.
+      retries: 10
+      start_period: 30s
+    networks:
+      - app-network
 
   server:
     build:
       context: ./server
       dockerfile: Dockerfile
-    container_name: nagaed_server
     restart: unless-stopped
-    env_file:
-      - .env
+    init: true
     environment:
+      PORT: "5000"
+      NODE_ENV: ${NODE_ENV:-production}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:?Set ALLOWED_ORIGINS in the root .env file}
       DB_HOST: db
-      DB_PORT: 3306
+      DB_PORT: "3306"
       DB_USER: root
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in the root .env file}
+      DB_NAME: ${DB_NAME:?Set DB_NAME in the root .env file}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in the root .env file}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1d}
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - app-network
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/"]
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:5000/api/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 10s
-    # Not published to the host — the client's nginx proxies to it internally.
-    # Uncomment below temporarily if you want to hit it directly for debugging:
-    # ports:
-    #   - "5000:5000"
+      start_period: 15s
+    networks:
+      - app-network
 
   fast_api:
     build:
       context: ./fast_api
       dockerfile: Dockerfile
-    container_name: nagaed_fastapi
     restart: unless-stopped
-    env_file:
-      - .env
-    networks:
-      - app-network
+    init: true
+    environment:
+      GROQ_API_KEY: ${GROQ_API_KEY:?Set GROQ_API_KEY in the root .env file}
+      GROQ_MODEL: ${GROQ_MODEL:-openai/gpt-oss-20b}
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=3)",
+        ]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 10s
-    # Not published to the host — the client's nginx proxies to it internally.
-    # Uncomment below temporarily if you want to hit /docs directly:
-    # ports:
-    #   - "8000:8000"
+      start_period: 15s
+    networks:
+      - app-network
 
   client:
     build:
@@ -77,13 +86,28 @@ services:
       args:
         VITE_API_URL: /api/v1
         VITE_AI_API_URL: /ai
-    container_name: nagaed_client
     restart: unless-stopped
     depends_on:
-      - server
-      - fast_api
+      server:
+        condition: service_healthy
+      fast_api:
+        condition: service_healthy
     ports:
-      - "8080:8080"   # only the frontend is exposed publicly
+      - "8080:8080"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://127.0.0.1:8080/",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     networks:
       - app-network
 

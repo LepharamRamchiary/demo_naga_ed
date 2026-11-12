@@ -117,28 +117,26 @@ The frontend is served through Nginx, which proxies `/api/` to Express and
    Copy-Item .env.example .env
    ```
 
-2. Edit the root `.env` and set real values for the database password, database
-   name, JWT secret, and Groq key. For example:
+2. Edit the root `.env` and replace the example Groq key, database password,
+   and JWT secret. Set `ALLOWED_ORIGINS` to the browser origin used to open the
+   app (for local Docker, `http://localhost:8080`):
 
    ```env
    GROQ_API_KEY=your_groq_api_key
-   PORT=5000
-   NODE_ENV=development
+   GROQ_MODEL=openai/gpt-oss-20b
+   NODE_ENV=production
    ALLOWED_ORIGINS=http://localhost:8080
 
-   DB_HOST=db
-   DB_PORT=3306
-   DB_USER=root
    DB_PASSWORD=your_mysql_password
-   DB_NAME=demo_naga_ed
+   DB_NAME=naga_ed
 
    JWT_SECRET=replace_with_a_long_random_secret
    JWT_EXPIRES_IN=1d
    ```
 
-   `DB_HOST=db` is required for Compose because the backend connects to the
-   MySQL service by its Compose service name. The Compose file also sets this
-   value for the backend container.
+   The Compose file connects the backend to MySQL using the `db` service name.
+   It also passes only the required settings to each service and waits for
+   service health checks before starting dependents.
 
 3. Build and start the services:
 
@@ -153,6 +151,10 @@ The frontend is served through Nginx, which proxies `/api/` to Express and
 Stop the services with `docker compose down`. To also delete the persisted
 database volume, use `docker compose down --volumes`; this permanently deletes
 the database data.
+
+To check the Compose configuration without starting containers, run
+`docker compose config --quiet`. To see service status, run
+`docker compose ps`.
 
 ## Environment files
 

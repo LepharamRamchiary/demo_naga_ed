@@ -18,10 +18,4 @@ USER node
 
 EXPOSE 5000
 
-# Basic health check hitting the "/" route already defined in app.js
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:5000/ || exit 1
-
-# NOTE: change "src/index.js" below if your actual entry file (the one
-# that calls app.listen()) has a different name/path.
 CMD ["node", "src/index.js"]
