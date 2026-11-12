@@ -48,11 +48,19 @@ async def generate_username_suggestions(interests: list[str]) -> list[str]:
             "Set it as an environment variable."
         )
 
+    # payload = {
+    #     "model": GROQ_MODEL,
+    #     "messages": _build_prompt(interests),
+    #     "temperature": 0.9,
+    #     "max_tokens": 200,
+    #     "response_format": {"type": "json_object"},
+    # }
     payload = {
         "model": GROQ_MODEL,
         "messages": _build_prompt(interests),
         "temperature": 0.9,
-        "max_tokens": 200,
+        "max_completion_tokens": 2000,
+        "reasoning_effort": "low",
         "response_format": {"type": "json_object"},
     }
 
