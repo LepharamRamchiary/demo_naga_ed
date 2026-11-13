@@ -27,6 +27,7 @@ def _build_prompt(interests: list[str]) -> list[dict]:
         "interests — avoid generic words like 'user' or 'player123'.\n"
         "5. Respond with ONLY a JSON object in this exact shape, no extra "
         'text, no markdown fences: {"suggestions": ["name1", "name2", "name3"]}'
+        "6. Give the usernames name in small letters and no spaces, no special characters, no underscores, no hyphens, no numbers, only letters.\n"
     )
 
     user_prompt = f"Interests: {interests_str}"
